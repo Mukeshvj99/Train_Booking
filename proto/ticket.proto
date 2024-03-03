@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option go_package = "github.com/mukesh/ticket_booking/proto";
+
+package train_ticket;
+
+message TicketRequest {
+  
+    string from = 1;
+    string to = 2;
+    User users=3;
+    float price=4;
+}
+
+message User {
+    string firstname =1;
+    string lastname = 2;
+    string email = 3;
+}
+
+message TicketResponse {
+     TicketReceipt receipt=1;
+     TicketStatus status=2;
+
+}
+
+message TicketReceipt {
+    TicketNumber seatno =1;
+    TicketSection coachno = 2;
+}
+
+message TicketNumber {
+    int32 ticket =1;
+}
+message TicketSection {
+    string section = 2;
+}
+message TicketStatus {
+     string status =1;
+}
+
+message TicketDetails {
+    TicketRequest userdetails=1;
+    TicketResponse status=2;
+}
+
+service TrainBooking{
+   rpc BookTicket(TicketRequest)returns(TicketResponse);
+   rpc GetReceipt(TicketReceipt)returns(TicketDetails);
+   rpc DeleteTicket(TicketReceipt)returns (TicketStatus);
+   rpc GetAllUsers(TicketSection)returns (stream TicketDetails);
+   rpc ModifySeat(TicketReceipt) returns (TicketResponse);
+}

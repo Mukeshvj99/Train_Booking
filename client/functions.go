@@ -23,7 +23,7 @@ func Book(client pb.TrainBookingClient, ticket *pb.TicketRequest) {
 		return
 	}
 
-	log.Println("Reponse", reponse)
+	log.Println("Seatno - ", reponse.Receipt.Seatno, "Coachno -", reponse.Receipt.Coachno.Section, " Status -", reponse.Status.Status)
 
 }
 
@@ -39,7 +39,8 @@ func GetTicketDetail(client pb.TrainBookingClient, receipt *pb.TicketReceipt) {
 		return
 	}
 
-	fmt.Println("Success", response)
+	log.Println("User from -", response.Userdetails.From, "User to -", response.Userdetails.To, "User Details - ", response.Userdetails.Users)
+	log.Println("Seatno - ", response.Status.Receipt.Seatno, "Coachno -", response.Status.Receipt.Coachno.Section, " Status -", response.Status.Status.Status)
 }
 
 func CancelTicket(client pb.TrainBookingClient, receipt *pb.TicketReceipt) {
@@ -66,14 +67,15 @@ func GetAllUsersData(client pb.TrainBookingClient, section *pb.TicketSection) {
 	}
 	log.Println("Receiving users Data...")
 	for {
-		message, err := stream.Recv()
+		response, err := stream.Recv()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
 			log.Fatalf("Error while streaming %v", err)
 		}
-		log.Println(message)
+		log.Println("User from ", response.Userdetails.From, "User to -", response.Userdetails.To, "User Details - ", response.Userdetails.Users)
+		log.Println("Seatno - ", response.Status.Receipt.Seatno, "Coachno -", response.Status.Receipt.Coachno.Section, " Status -", response.Status.Status.Status)
 	}
 	log.Println("streaming completed")
 }
@@ -89,6 +91,6 @@ func UpdateSeat(client pb.TrainBookingClient, receipt *pb.TicketReceipt) {
 		return
 	}
 
-	log.Println("Reponse", reponse)
+	log.Println("Seatno - ", reponse.Receipt.Seatno, "Coachno -", reponse.Receipt.Coachno.Section, " Status -", reponse.Status.Status)
 
 }
